@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    
+
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 265px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #33FFC3;
+  overflow-x: hidden;
+  padding-top: 200px;
+}
+.sidenav2 {
+  height: 100%;
+  width: 265px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #33FFE8 ; 
+  
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  
+}
+
+.sidenav a:hover {
+  color: #0D5054;
+}
+.field_set {
+    margin-top: 20px;
+    border: 2px black solid;
+    padding: 4px;
+	text-align: center;
+}
+
+.main {
+  margin-left: 265px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+{% block style %}{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'traitement_app/bootstrap-4.0.0-dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'traitement_app/jquery.min.js' %}"></script>
+    <script src="{% static 'traitement_app/popper.min.js' %}"></script>
+    <script src="{% static 'traitement_app/bootstrap-4.0.0-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'traitement_app/moment.min.js' %}"></script>
+    <script src="{% static 'traitement_app/sweetalert.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'traitement_app/DataTables/DataTables-1.10.20/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'traitement_app/DataTables/Select-1.3.1/css/select.bootstrap4.min.css' %}">
+
+    <script src="{% static 'traitement_app/DataTables/DataTables-1.10.20/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'traitement_app/DataTables/DataTables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'traitement_app/DataTables/Select-1.3.1/js/dataTables.select.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'traitement_app/select2.min.css' %}">
+    <script src="{% static 'traitement_app/select2.min.js' %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'traitement_app/print.min.css' %}">
+    <script src="{% static 'traitement_app/print.min.js' %}"></script>
+
+    <script>
+        function openAttachment() {
+            document.getElementById('attachment').click();
+        }
+    
+        function encodeImageFileAsURL(element) {
+            var file = element.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                $.ajax({
+                type: 'POST',
+                url: "{% url 'traitement_app:index'%}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    img_data: reader.result.split(',')[1],
+                },
+                success: function (response) {
+                    location.replace("/image");
+                },
+                error: function (response) {
+                    swal("Erreur!", "Une erreur s'est produite.", "error");
+                }
+            });
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+{% block script %}{% endblock %}
+
+
+</head>
+<body>
+{% csrf_token %}
+{% block sidebar %}
+<div class="sidenav">
+  
+ <a class=" mx-auto btn btn-light" href="#" onclick="openAttachment()"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Charger une image
+ </a>
+ <a class="mx-auto my-5 btn btn-light" href="{% url 'traitement_app:ResNet101' %} " role="button">Detecter</a>
+
+
+</div>
+<input type="file" class="file" id="attachment" style="display: none;" onchange="encodeImageFileAsURL(this)" accept=".jpg, .jpeg, .png"/>
+{% endblock %}
+
+<div class="main">
+
+ <div class="field_set">
+  <h2 >Detection d'objets presents dans une image</h2>
+ </div>
+
+  
+  
+  <div>
+  {% block main %}
+	
+  {% endblock %}
+  </div>
+  
+</div>
+   
+</body>
+</html> 

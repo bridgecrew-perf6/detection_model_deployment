@@ -1,0 +1,9 @@
+item {
+    id: 1
+    name: 'voiture'
+}
+
+item {
+    id: 2
+    name: 'maison'
+}

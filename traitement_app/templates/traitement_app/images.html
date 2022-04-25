@@ -1,0 +1,22 @@
+{% extends "traitement_app/base3.html" %}
+
+{% block title %}Image{% endblock %}
+{% load static %}
+{% block style %}
+<style>
+    .displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto }
+</style>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid" style="margin-top: 50px; margin-bottom: 100px; display: block;margin-left: auto;">
+    <img class="displayed" src="{% static 'traitement_app/images/image.png' %}">
+</div>
+{% endblock %}
